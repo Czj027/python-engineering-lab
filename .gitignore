@@ -1,0 +1,17 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.idea/
+.vscode/
+.env
+.env.*
+*.pem
+*.key
+*.log
+/rerun/
+/plots/
+/data_plot/plots/
+/robot_arm/results/
+/pid_sim/results/

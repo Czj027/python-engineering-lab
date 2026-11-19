@@ -1,0 +1,41 @@
+{
+  "x": {
+    "column": "Displacement [mm]",
+    "label": "Displacement",
+    "unit": "mm"
+  },
+  "x_mode": "numeric",
+  "rows_read": 7,
+  "rows_written": 7,
+  "rows_without_x": 0,
+  "rows_without_signals": 0,
+  "duplicate_rows": 0,
+  "series": [
+    {
+      "column": "Load [N]",
+      "label": "Load",
+      "unit": "N",
+      "missing": 0,
+      "plotted_points": 7,
+      "figure": "01_load"
+    },
+    {
+      "column": "Voltage [V]",
+      "label": "Voltage",
+      "unit": "V",
+      "missing": 0,
+      "plotted_points": 7,
+      "figure": "02_voltage"
+    }
+  ],
+  "ignored_columns": [
+    "Note"
+  ],
+  "source": "calibration.xlsx",
+  "reader": {
+    "sheet": 0,
+    "engine": "openpyxl"
+  },
+  "font": "DejaVu Sans",
+  "png_dpi": 300
+}

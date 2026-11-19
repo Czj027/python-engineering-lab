@@ -1,0 +1,41 @@
+{
+  "x": {
+    "column": "Time [s]",
+    "label": "Time",
+    "unit": "s"
+  },
+  "x_mode": "numeric",
+  "rows_read": 9,
+  "rows_written": 7,
+  "rows_without_x": 1,
+  "rows_without_signals": 0,
+  "duplicate_rows": 1,
+  "series": [
+    {
+      "column": "Temperature [°C]",
+      "label": "Temperature",
+      "unit": "°C",
+      "missing": 0,
+      "plotted_points": 7,
+      "figure": "01_temperature"
+    },
+    {
+      "column": "Pressure [kPa]",
+      "label": "Pressure",
+      "unit": "kPa",
+      "missing": 1,
+      "plotted_points": 6,
+      "figure": "02_pressure"
+    }
+  ],
+  "ignored_columns": [
+    "Note"
+  ],
+  "source": "sensors.csv",
+  "reader": {
+    "encoding": "utf-8-sig",
+    "delimiter": ","
+  },
+  "font": "DejaVu Sans",
+  "png_dpi": 300
+}

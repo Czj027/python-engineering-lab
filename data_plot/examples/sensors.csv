@@ -1,0 +1,10 @@
+Time [s],Temperature [°C],Pressure [kPa],Note
+2,24.6,103.1,warm-up
+0,23.1,100.8,start
+1,23.5,101.9,
+3,25.3,,pressure dropout
+4,26.0,104.6,
+5,26.3,105.1,
+6,26.8,105.3,
+1,23.5,101.9,
+,27.0,105.7,no timestamp

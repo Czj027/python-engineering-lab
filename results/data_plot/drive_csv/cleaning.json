@@ -1,0 +1,41 @@
+{
+  "x": {
+    "column": "Time (s)",
+    "label": "Time",
+    "unit": "s"
+  },
+  "x_mode": "numeric",
+  "rows_read": 7,
+  "rows_written": 7,
+  "rows_without_x": 0,
+  "rows_without_signals": 0,
+  "duplicate_rows": 0,
+  "series": [
+    {
+      "column": "Speed (rpm)",
+      "label": "Speed",
+      "unit": "rpm",
+      "missing": 0,
+      "plotted_points": 7,
+      "figure": "01_speed"
+    },
+    {
+      "column": "Torque (N·m)",
+      "label": "Torque",
+      "unit": "N·m",
+      "missing": 0,
+      "plotted_points": 7,
+      "figure": "02_torque"
+    }
+  ],
+  "ignored_columns": [
+    "Note"
+  ],
+  "source": "drive.csv",
+  "reader": {
+    "encoding": "gb18030",
+    "delimiter": ";"
+  },
+  "font": "DejaVu Sans",
+  "png_dpi": 300
+}

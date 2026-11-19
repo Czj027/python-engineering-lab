@@ -1,0 +1,3 @@
+-r robot_arm/requirements.txt
+-r data_plot/requirements.txt
+-r pid_sim/requirements.txt
