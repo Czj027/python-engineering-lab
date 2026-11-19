@@ -4,7 +4,7 @@
 
 ## 安装与运行
 
-在本目录使用 Python 3.13 安装一次依赖。
+在本目录使用 64 位 CPython 3.10–3.14 安装依赖。
 
 ```bash
 python -m pip install -r requirements.txt
@@ -50,3 +50,7 @@ python plot_data.py readings.csv --x Time --y Current --unit "Time=s" --unit "Cu
 每个结果目录包含 `cleaned.csv`、`cleaning.json` 及每个变量的 `PNG + PDF`。PNG 为 300 dpi，PDF 为矢量图。图例使用变量名，横纵轴都标明单位，同一图使用统一字体。 [查看温度 PNG](../results/data_plot/sensors_csv/01_temperature.png) · [查看温度 PDF](../results/data_plot/sensors_csv/01_temperature.pdf) · [查看清洗日志](../results/data_plot/sensors_csv/cleaning.json)
 
 `examples/invalid/` 包含空文件、乱码表头、混入非法数值、整列缺失四种失败样例。运行 `python plot_data.py examples/invalid --output plots` 可检查所有异常提示。也可加 `--strict-missing` 对 `sensors.csv` 检查普通缺失值的报错。
+
+## 从哪读代码
+
+从 `main` 看一份输入如何交给 `publish`，再跟进 `read_table` 的格式解析、`parse_columns` 的缺值处理和去重、`save_plots` 的图像导出。用示例的压力列验证缺值为什么形成断线，以及同一行的温度为何仍有数据点。 [程序入口](plot_data.py) · [合成传感器数据](examples/sensors.csv)

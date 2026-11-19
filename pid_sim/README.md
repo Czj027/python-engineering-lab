@@ -4,7 +4,7 @@
 
 ## 安装与运行
 
-在本目录使用 Python 3.13 安装一次依赖，再运行默认示例。
+在本目录使用 64 位 CPython 3.10–3.14 安装依赖，再运行默认示例。
 
 ```bash
 python -m pip install -r requirements.txt
@@ -53,3 +53,7 @@ T(s) = -------------------------------------------------
 | `validation.json` | 闭环系数、极点、采样条件与逐项误差 |
 
 [查看响应图](../results/pid_sim/step_response.png) · [查看指标 CSV](../results/pid_sim/metrics.csv) · [查看对照明细](../results/pid_sim/validation.json)
+
+## 从哪读代码
+
+在 `closed_loop` 对照上面的传递函数系数。`simulate` 用 SciPy 模拟，并在 `control` 中重新搭建单位负反馈作为参照。`step_metrics` 从时间序列找峰值和最后一个越界点。可以在 `step_response.csv` 中定位激进组最后一个超过 2% 调节带的采样点，再核对下一点是否为 `9.318 s`。 [仿真代码](simulate_pid.py) · [响应原始数据](../results/pid_sim/step_response.csv)
