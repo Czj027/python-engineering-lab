@@ -1,6 +1,11 @@
 {
   "robot": "PUMA 560",
   "roboticstoolbox_version": "1.5.0",
+  "fk_reference": {
+    "model": "roboticstoolbox.models.DH.Puma560.Puma560",
+    "method": "roboticstoolbox.robot.DHRobot.DHRobot.fkine"
+  },
+  "ik_method": "scipy.optimize.least_squares (method='trf', analytic Jacobian, bounds)",
   "random_seed": 20261119,
   "fk": [
     {
@@ -285,6 +290,230 @@
       "orientation_error_rad": 5.746023137021023e-16,
       "singular_value_ratio": 0.10147167131462682,
       "attempts": 2,
+      "trace": [
+        {
+          "attempt": 1,
+          "start_q_rad": [
+            0.0,
+            0.6981317007977318,
+            -1.1344640137963142,
+            0.0,
+            0.7853981633974483,
+            0.0
+          ],
+          "residual_evaluations": 28,
+          "termination": "`ftol` termination condition is satisfied.",
+          "final_cost": 0.13032290405942903,
+          "jacobian_evaluations": [
+            {
+              "cost": 0.8289876040255217,
+              "position_error_m": 1.0229978222900804,
+              "orientation_error_rad": 2.344059319270066
+            },
+            {
+              "cost": 0.443972195700007,
+              "position_error_m": 0.6771741204985474,
+              "orientation_error_rad": 1.764730824335078
+            },
+            {
+              "cost": 0.23492236826436463,
+              "position_error_m": 0.45687595486902766,
+              "orientation_error_rad": 1.2925218142225585
+            },
+            {
+              "cost": 0.15817089961759226,
+              "position_error_m": 0.38354931119477725,
+              "orientation_error_rad": 1.0122996797410782
+            },
+            {
+              "cost": 0.13575355236056982,
+              "position_error_m": 0.3840326253193731,
+              "orientation_error_rad": 0.8559740594251835
+            },
+            {
+              "cost": 0.1307833530034485,
+              "position_error_m": 0.3787686577978572,
+              "orientation_error_rad": 0.8339689504180459
+            },
+            {
+              "cost": 0.1304025380184251,
+              "position_error_m": 0.37703701704534826,
+              "orientation_error_rad": 0.8360192506813052
+            },
+            {
+              "cost": 0.13034793367791336,
+              "position_error_m": 0.3770277495139861,
+              "orientation_error_rad": 0.8356364984785143
+            },
+            {
+              "cost": 0.1303321403105886,
+              "position_error_m": 0.3770262548027973,
+              "orientation_error_rad": 0.8355224202906268
+            },
+            {
+              "cost": 0.13032631185310245,
+              "position_error_m": 0.37702609380818725,
+              "orientation_error_rad": 0.8354792141214396
+            },
+            {
+              "cost": 0.13032421515855858,
+              "position_error_m": 0.3770260840660511,
+              "orientation_error_rad": 0.8354635349190828
+            },
+            {
+              "cost": 0.13032339982343297,
+              "position_error_m": 0.3770260840366782,
+              "orientation_error_rad": 0.8354574271190776
+            },
+            {
+              "cost": 0.13032308951760857,
+              "position_error_m": 0.37702608403491145,
+              "orientation_error_rad": 0.8354551025352844
+            },
+            {
+              "cost": 0.13032297230641493,
+              "position_error_m": 0.3770260840346679,
+              "orientation_error_rad": 0.8354542244724646
+            },
+            {
+              "cost": 0.13032292916910845,
+              "position_error_m": 0.3770260840346354,
+              "orientation_error_rad": 0.835453901318137
+            },
+            {
+              "cost": 0.13032291329682738,
+              "position_error_m": 0.37702608403463095,
+              "orientation_error_rad": 0.8354537824141378
+            },
+            {
+              "cost": 0.13032290745745045,
+              "position_error_m": 0.37702608403463034,
+              "orientation_error_rad": 0.8354537386696144
+            },
+            {
+              "cost": 0.130322905309334,
+              "position_error_m": 0.3770260840346303,
+              "orientation_error_rad": 0.8354537225774292
+            },
+            {
+              "cost": 0.13032290451915152,
+              "position_error_m": 0.3770260840346303,
+              "orientation_error_rad": 0.835453716657935
+            },
+            {
+              "cost": 0.13032290422849255,
+              "position_error_m": 0.3770260840346303,
+              "orientation_error_rad": 0.8354537144805213
+            },
+            {
+              "cost": 0.13032290412157913,
+              "position_error_m": 0.3770260840346303,
+              "orientation_error_rad": 0.835453713679601
+            },
+            {
+              "cost": 0.1303229040822535,
+              "position_error_m": 0.3770260840346303,
+              "orientation_error_rad": 0.8354537133850009
+            },
+            {
+              "cost": 0.1303229040677886,
+              "position_error_m": 0.3770260840346303,
+              "orientation_error_rad": 0.8354537132766398
+            },
+            {
+              "cost": 0.13032290406246805,
+              "position_error_m": 0.3770260840346303,
+              "orientation_error_rad": 0.8354537132367821
+            },
+            {
+              "cost": 0.13032290406051103,
+              "position_error_m": 0.3770260840346303,
+              "orientation_error_rad": 0.8354537132221214
+            },
+            {
+              "cost": 0.1303229040597912,
+              "position_error_m": 0.3770260840346303,
+              "orientation_error_rad": 0.8354537132167291
+            },
+            {
+              "cost": 0.13032290405952643,
+              "position_error_m": 0.3770260840346303,
+              "orientation_error_rad": 0.8354537132147455
+            },
+            {
+              "cost": 0.13032290405942903,
+              "position_error_m": 0.3770260840346303,
+              "orientation_error_rad": 0.835453713214016
+            }
+          ]
+        },
+        {
+          "attempt": 2,
+          "start_q_rad": [
+            0.0,
+            1.7453292519943295,
+            -2.356194490192345,
+            0.0,
+            -0.7853981633974483,
+            0.0
+          ],
+          "residual_evaluations": 10,
+          "termination": "`gtol` termination condition is satisfied.",
+          "final_cost": 5.038641994630191e-32,
+          "jacobian_evaluations": [
+            {
+              "cost": 0.9306971668130448,
+              "position_error_m": 1.0874143011272075,
+              "orientation_error_rad": 2.659229752827087
+            },
+            {
+              "cost": 0.6144112048539192,
+              "position_error_m": 0.8332332922772,
+              "orientation_error_rad": 2.0769838192871624
+            },
+            {
+              "cost": 0.270454185477167,
+              "position_error_m": 0.5455115197788448,
+              "orientation_error_rad": 1.2407406644529702
+            },
+            {
+              "cost": 0.057094231385323206,
+              "position_error_m": 0.2884624818526873,
+              "orientation_error_rad": 0.417882338924665
+            },
+            {
+              "cost": 0.007545788809642586,
+              "position_error_m": 0.12120865686405466,
+              "orientation_error_rad": 0.0471471238090019
+            },
+            {
+              "cost": 0.0007564313490049111,
+              "position_error_m": 0.027143319318998122,
+              "orientation_error_rad": 0.06567520815504299
+            },
+            {
+              "cost": 1.0136040746724348e-05,
+              "position_error_m": 0.001422438925673214,
+              "orientation_error_rad": 0.010068902393211974
+            },
+            {
+              "cost": 1.397437686780682e-09,
+              "position_error_m": 1.3479505910884543e-05,
+              "orientation_error_rad": 0.00012048924103929595
+            },
+            {
+              "cost": 5.893753475243319e-17,
+              "position_error_m": 7.950943682653286e-09,
+              "orientation_error_rad": 1.742564586622238e-08
+            },
+            {
+              "cost": 5.038641994630191e-32,
+              "position_error_m": 1.8410966031475738e-16,
+              "orientation_error_rad": 5.746023137021023e-16
+            }
+          ]
+        }
+      ],
       "toolbox_position_error_m": 1.8410966031475738e-16,
       "toolbox_orientation_error_rad": 5.746023137021023e-16
     },
@@ -1305,7 +1534,8 @@
       "position_error_m": null,
       "orientation_error_rad": null,
       "singular_value_ratio": null,
-      "attempts": 0
+      "attempts": 0,
+      "trace": null
     },
     "unreachable_inside_shoulder_offset": {
       "status": "unreachable",
@@ -1314,7 +1544,8 @@
       "position_error_m": null,
       "orientation_error_rad": null,
       "singular_value_ratio": null,
-      "attempts": 0
+      "attempts": 0,
+      "trace": null
     },
     "singular": {
       "status": "singular",
@@ -1330,7 +1561,8 @@
       "position_error_m": 0.0,
       "orientation_error_rad": 0.0,
       "singular_value_ratio": 4.031850891938962e-17,
-      "attempts": 1
+      "attempts": 1,
+      "trace": null
     },
     "invalid_pose": {
       "status": "invalid",
@@ -1339,7 +1571,8 @@
       "position_error_m": null,
       "orientation_error_rad": null,
       "singular_value_ratio": null,
-      "attempts": 0
+      "attempts": 0,
+      "trace": null
     }
   },
   "trajectory": {

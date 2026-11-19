@@ -71,9 +71,10 @@ class IKResult:
     orientation_error_rad: float | None = None
     singular_value_ratio: float | None = None
     attempts: int = 0
+    trace: list[dict] | None = None
 
 
-def inverse(target, seed_q=None):
+def inverse(target, seed_q=None, *, trace=False):
     """Solve a base-frame SE(3) pose with joint limits and explicit status codes."""
     try:
         target = np.asarray(target, dtype=float)
@@ -103,13 +104,23 @@ def inverse(target, seed_q=None):
             or np.hypot(*position[:2]) < shoulder_offset - 1e-10):
         return IKResult("unreachable", "目标位置超出 PUMA 560 的几何工作空间。")
 
-    def residual(q):
-        actual = forward(q)
+    def pose_residual(actual):
         return np.r_[actual[:3, 3] - position,
                      ROTATION_WEIGHT_M * (actual[:3, :3] - rotation).ravel()]
 
+    def residual(q):
+        return pose_residual(forward(q))
+
+    attempt_log = [] if trace else None
+    jacobian_log = None
+
     def residual_jacobian(q):
         frames = forward_frames(q)
+        if jacobian_log is not None:
+            error = pose_residual(frames[-1])
+            linear_error, angular_error = pose_errors(frames[-1], target)
+            jacobian_log.append({"cost": float(0.5 * error @ error),
+                                 "position_error_m": linear_error, "orientation_error_rad": angular_error})
         jacobian = geometric_jacobian(frames)
         # dR/dq_i has columns z_i × R[:, j] for each tool-frame axis j.
         axes = jacobian[3:].T
@@ -124,11 +135,16 @@ def inverse(target, seed_q=None):
     best = None
     best_cost = np.inf
     for attempt, start in enumerate(starts, start=1):
-        solution = least_squares(residual, start, jac=residual_jacobian, bounds=(LOWER, UPPER),
+        jacobian_log = [] if trace else None
+        solution = least_squares(residual, start, jac=residual_jacobian, bounds=(LOWER, UPPER), method="trf",
                                  ftol=1e-12, xtol=1e-12, gtol=1e-14, max_nfev=110)
         frames = forward_frames(solution.x)
         linear_error, angular_error = pose_errors(frames[-1], target)
         errors = (linear_error, angular_error)
+        if attempt_log is not None:
+            attempt_log.append({"attempt": attempt, "start_q_rad": start.tolist(),
+                                "residual_evaluations": solution.nfev, "termination": solution.message.strip(),
+                                "final_cost": float(solution.cost), "jacobian_evaluations": jacobian_log})
         if solution.cost < best_cost:
             best_cost, best = solution.cost, errors
         if linear_error < POSITION_TOL and angular_error < ORIENTATION_TOL:
@@ -139,9 +155,9 @@ def inverse(target, seed_q=None):
             status = "singular" if ratio < SINGULAR_RATIO else "converged"
             message = ("达到目标，但当前逆解处于或接近奇异位形，部分运动方向不可控。"
                        if status == "singular" else "位置与姿态均达到容差。")
-            return IKResult(status, message, solution.x.tolist(), *errors, ratio, attempt)
+            return IKResult(status, message, solution.x.tolist(), *errors, ratio, attempt, attempt_log)
     return IKResult("not_converged", "在关节限位内未收敛，目标可能不可达或需要不同初值。",
-                    position_error_m=best[0], orientation_error_rad=best[1], attempts=len(starts))
+                    position_error_m=best[0], orientation_error_rad=best[1], attempts=len(starts), trace=attempt_log)
 
 
 def quintic_trajectory(q_start, q_finish, time, duration):

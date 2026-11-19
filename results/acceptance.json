@@ -2,6 +2,8 @@
   "robot_arm": {
     "fk_cases": 10,
     "fk_max_position_error_m": 0.0,
+    "fk_model_perturbation_checked": true,
+    "ik_convergence_trace_checked": true,
     "ik_cases": 20,
     "ik_converged": 20,
     "ik_max_position_error_m": 4.109325218620118e-15,

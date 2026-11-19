@@ -47,6 +47,7 @@ def png_dpi(path):
 def robot_checks(folder):
     from PIL import Image
 
+    run("robot_arm/test_fk_reference.py")
     run("robot_arm/demo.py", "--output", folder)
     run("robot_arm/demo.py", "--target", ROOT / "robot_arm" / "unreachable_pose.json",
         code=2, contains='"status": "unreachable"')
@@ -57,6 +58,12 @@ def robot_checks(folder):
     converged = [row for row in report["ik"] if row["status"] == "converged" and
                  row["toolbox_position_error_m"] < 1e-4 and row["toolbox_orientation_error_rad"] < 1e-4]
     require(len(report["ik"]) == 20 and len(converged) >= 18, "IK: at least 18/20 full poses must pass")
+    attempts = report["ik"][0]["trace"]
+    require(attempts, "First IK case must record the numerical solve")
+    final_attempt = attempts[-1]
+    evaluations = final_attempt["jacobian_evaluations"]
+    require(len(evaluations) > 1 and final_attempt["final_cost"] < evaluations[0]["cost"],
+            "IK trace: the last attempt should show progress from its starting cost")
     require(report["cases"]["unreachable"]["status"] == "unreachable", "Missing unreachable status")
     require(report["cases"]["singular"]["status"] == "singular", "Missing singular status")
     for magnitude in report["trajectory"]["endpoint_maxima"].values():
@@ -73,6 +80,7 @@ def robot_checks(folder):
         require(first != gif.convert("RGB").tobytes(), "GIF should reach a distinct end pose")
         require(set(durations) == {40}, "GIF should play at 25 frames per second")
     return {"fk_cases": len(report["fk"]), "fk_max_position_error_m": max_fk,
+            "fk_model_perturbation_checked": True, "ik_convergence_trace_checked": True,
             "ik_cases": len(report["ik"]), "ik_converged": len(converged),
             "ik_max_position_error_m": max(row["toolbox_position_error_m"] for row in converged),
             "ik_max_orientation_error_rad": max(row["toolbox_orientation_error_rad"] for row in converged),

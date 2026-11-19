@@ -25,6 +25,16 @@ FPS = 25
 COLORS = ["#1565a8", "#c44e21", "#00836e", "#7855a5", "#925918", "#ab437b"]
 
 
+def compare_forward(q, reference):
+    """Compare the local standard-DH chain against the installed Toolbox model."""
+    actual = forward(q)
+    toolbox = reference.fkine(q).A
+    linear, angular = pose_errors(actual, toolbox)
+    return {"q_rad": q.tolist(), "actual_xyz_m": actual[:3, 3].tolist(),
+            "toolbox_xyz_m": toolbox[:3, 3].tolist(), "position_error_m": linear,
+            "orientation_error_rad": angular}
+
+
 def validate_kinematics():
     from roboticstoolbox.models.DH import Puma560
 
@@ -32,19 +42,16 @@ def validate_kinematics():
     rng = np.random.default_rng(SEED)
     fk_cases = []
     for index, q in enumerate(rng.uniform(LOWER, UPPER, (10, 6)), 1):
-        toolbox = reference.fkine(q).A
-        actual = forward(q)
-        linear, angular = pose_errors(actual, toolbox)
-        fk_cases.append({"case": index, "q_rad": q.tolist(), "actual_xyz_m": actual[:3, 3].tolist(),
-                         "toolbox_xyz_m": toolbox[:3, 3].tolist(), "position_error_m": linear,
-                         "orientation_error_rad": angular})
+        fk_cases.append({"case": index, **compare_forward(q, reference)})
 
     ik_cases = []
     for index, q in enumerate(rng.uniform(LOWER, UPPER, (20, 6)), 1):
         target = reference.fkine(q).A
-        result = inverse(target)
-        row = {"case": index, "target": target.tolist(), "target_source_q_rad": q.tolist(),
-               **asdict(result)}
+        result = inverse(target, trace=index == 1)
+        outcome = asdict(result)
+        if outcome["trace"] is None:
+            del outcome["trace"]
+        row = {"case": index, "target": target.tolist(), "target_source_q_rad": q.tolist(), **outcome}
         if result.q_rad is not None:
             linear, angular = pose_errors(reference.fkine(result.q_rad).A, target)
             row.update(toolbox_position_error_m=linear, toolbox_orientation_error_rad=angular)
@@ -63,7 +70,12 @@ def validate_kinematics():
     }
     success = sum(row["status"] == "converged" and row["toolbox_position_error_m"] < 1e-4
                   and row["toolbox_orientation_error_rad"] < 1e-4 for row in ik_cases)
+    reference_class = type(reference)
+    reference_fk = reference.fkine
     return {"robot": "PUMA 560", "roboticstoolbox_version": version("roboticstoolbox-python"),
+            "fk_reference": {"model": f"{reference_class.__module__}.{reference_class.__name__}",
+                             "method": f"{reference_fk.__module__}.{reference_fk.__qualname__}"},
+            "ik_method": "scipy.optimize.least_squares (method='trf', analytic Jacobian, bounds)",
             "random_seed": SEED, "fk": fk_cases, "ik": ik_cases, "ik_successes": success, "cases": cases}
 
 
@@ -168,9 +180,12 @@ def main():
     parser.add_argument("--output", type=Path, default=Path(__file__).parent / "results")
     parser.add_argument("--target", type=Path, help="Solve a JSON file containing one 4x4 pose matrix")
     parser.add_argument("--seed-deg", type=float, nargs=6, help="Optional IK initial joint angles in degrees")
+    parser.add_argument("--trace", action="store_true", help="Include IK convergence details for --target")
     args = parser.parse_args()
     if args.seed_deg is not None and args.target is None:
         parser.error("--seed-deg requires --target")
+    if args.trace and args.target is None:
+        parser.error("--trace requires --target")
     if args.target is not None:
         try:
             target = json.loads(args.target.read_text(encoding="utf-8-sig"))
@@ -178,8 +193,11 @@ def main():
             print(f"[ERROR] 无法读取目标 JSON：{exc}", file=sys.stderr)
             return 2
         seed = None if args.seed_deg is None else np.deg2rad(args.seed_deg)
-        result = inverse(target, seed)
-        print(json.dumps(asdict(result), ensure_ascii=False, indent=2))
+        result = inverse(target, seed, trace=args.trace)
+        payload = asdict(result)
+        if not args.trace:
+            del payload["trace"]
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
         return 0 if result.status in {"converged", "singular"} else 2
 
     args.output.mkdir(parents=True, exist_ok=True)
